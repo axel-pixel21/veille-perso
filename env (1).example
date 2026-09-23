@@ -1,0 +1,15 @@
+# --- Backend LLM ---
+# "gemini" aujourd'hui (gratuit). Passera à "perplexity" plus tard.
+LLM_BACKEND=gemini
+
+# Clé API Google AI Studio (https://aistudio.google.com/apikey)
+GEMINI_API_KEY=colle_ta_cle_ici
+
+# Clé API Perplexity (à remplir seulement quand tu passes sur ce backend)
+PERPLEXITY_API_KEY=
+
+# --- Telegram ---
+# Token du bot obtenu via @BotFather
+TELEGRAM_BOT_TOKEN=colle_ton_token_ici
+# Ton chat_id (obtenu via @userinfobot ou l'API getUpdates, voir README)
+TELEGRAM_CHAT_ID=colle_ton_chat_id_ici

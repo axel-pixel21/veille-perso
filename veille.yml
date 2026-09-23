@@ -1,0 +1,66 @@
+name: Veille quotidienne
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # 06:00 UTC = 06:00 heure d'Abidjan (pas de décalage) — veille cyber
+    - cron: '30 6 * * *'  # 06:30 UTC = 06:30 heure d'Abidjan — veille autodidacte
+  workflow_dispatch:        # permet de lancer manuellement depuis l'onglet "Actions" pour tester
+
+jobs:
+  cyber:
+    if: github.event.schedule == '0 6 * * *' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install -r requirements.txt
+
+      - run: python veille.py cyber
+        env:
+          LLM_BACKEND: gemini
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - name: Archiver le rapport dans le dépôt
+        run: |
+          git config user.name "veille-bot"
+          git config user.email "veille-bot@users.noreply.github.com"
+          git add reports/
+          git diff --cached --quiet && echo "rien à commiter" || git commit -m "Rapport cyber $(date +%F)"
+          git push
+
+  autodidacte:
+    if: github.event.schedule == '30 6 * * *' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install -r requirements.txt
+
+      - run: python veille.py autodidacte
+        env:
+          LLM_BACKEND: gemini
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - name: Archiver le rapport dans le dépôt
+        run: |
+          git config user.name "veille-bot"
+          git config user.email "veille-bot@users.noreply.github.com"
+          git add reports/
+          git diff --cached --quiet && echo "rien à commiter" || git commit -m "Rapport autodidacte $(date +%F)"
+          git push
