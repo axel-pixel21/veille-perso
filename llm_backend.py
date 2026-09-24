@@ -35,7 +35,7 @@ def _generate_gemini(prompt: str) -> str:
     google_search_tool = Tool(google_search=GoogleSearch())
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash",  # gratuit, supporte la recherche web (grounding)
+    model="gemini-3.6-flash",  # gratuit (tier gratuit rate-limité), supporte la recherche web (grounding)
         contents=prompt,
         config=GenerateContentConfig(
             tools=[google_search_tool],
