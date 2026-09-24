@@ -21,7 +21,7 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-            - run: python veille.py cyber
+      - run: python veille.py cyber
         env:
           LLM_BACKEND: gemini
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -51,7 +51,7 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-            - run: python veille.py cyber
+      - run: python veille.py autodidacte
         env:
           LLM_BACKEND: gemini
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
