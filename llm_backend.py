@@ -34,8 +34,13 @@ def _generate_gemini(prompt: str) -> str:
 
     google_search_tool = Tool(google_search=GoogleSearch())
 
+    # Modèle configurable via la variable GEMINI_MODEL (secret GitHub ou .env) —
+    # pratique pour basculer rapidement si un modèle est à court de quota gratuit.
+    model = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
+    print(f"[debug] Modèle Gemini effectivement utilisé : {model}")
+
     response = client.models.generate_content(
-    model="gemini-3.6-flash",  # gratuit (tier gratuit rate-limité), supporte la recherche web (grounding)
+        model=model,
         contents=prompt,
         config=GenerateContentConfig(
             tools=[google_search_tool],
